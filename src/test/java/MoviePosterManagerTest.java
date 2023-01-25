@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoviePosterManagerTest {
@@ -14,17 +15,17 @@ public class MoviePosterManagerTest {
     }
 
     @Test
-    public void shouldAddMovie() {
-        Movie movie = new Movie("Красавица и чудовище");
+    public void shouldAddOneMovie() {
+        Movie[] movies = {new Movie("Красавица и чудовище")};
         MoviePosterManager moviePosterManager = new MoviePosterManager();
 
-        moviePosterManager.addMovie(movie);
-        Movie foundedMovie = moviePosterManager.findAll()[0];
-        assertEquals(movie.getName(), foundedMovie.getName());
+        moviePosterManager.addMovie(movies[0]);
+        Movie[] foundedMovies = moviePosterManager.findAll();
+        assertArrayEquals(movies, foundedMovies);
     }
 
     @Test
-    public void shouldAddSeveralMovie() {
+    public void shouldAddSeveralMovies() {
         Movie[] moviesToAdd = {new Movie("Красавица и чудовище"), new Movie("Аватар"),
                 new Movie("Титаник")};
 
@@ -34,9 +35,7 @@ public class MoviePosterManagerTest {
         moviePosterManager.addMovie(moviesToAdd[2]);
 
         Movie[] foundedMovies = moviePosterManager.findAll();
-        for (int i = 0; i < foundedMovies.length; i++) {
-            assertEquals(foundedMovies[0], moviesToAdd[0]);
-        }
+        assertArrayEquals(moviesToAdd, foundedMovies);
     }
 
     @Test
