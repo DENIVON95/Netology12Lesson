@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoviePosterManagerTest {
@@ -23,64 +25,55 @@ public class MoviePosterManagerTest {
 
     @Test
     public void shouldAddSeveralMovie() {
-        Movie movie = new Movie("Красавица и чудовище");
-        Movie secondMovie = new Movie("Аватар");
-        Movie thirdMovie = new Movie("Титаник");
-        MoviePosterManager moviePosterManager = new MoviePosterManager();
+        Movie[] moviesToAdd = {new Movie("Красавица и чудовище"), new Movie("Аватар"),
+                new Movie("Титаник")};
 
-        moviePosterManager.addMovie(movie);
-        moviePosterManager.addMovie(secondMovie);
-        moviePosterManager.addMovie(thirdMovie);
+        MoviePosterManager moviePosterManager = new MoviePosterManager();
+        moviePosterManager.addMovie(moviesToAdd[0]);
+        moviePosterManager.addMovie(moviesToAdd[1]);
+        moviePosterManager.addMovie(moviesToAdd[2]);
+
         Movie[] foundedMovies = moviePosterManager.findAll();
-        assertEquals(3, foundedMovies.length);
+        for (int i = 0; i < foundedMovies.length; i++) {
+            assertEquals(foundedMovies[0], moviesToAdd[0]);
+        }
     }
 
     @Test
     public void shouldReturnLastMoviesInRightOrder() {
-        Movie movie = new Movie("Красавица и чудовище");
-        Movie secondMovie = new Movie("Аватар");
-        Movie thirdMovie = new Movie("Титаник");
-        MoviePosterManager moviePosterManager = new MoviePosterManager();
+        Movie[] moviesToAdd = {new Movie("Красавица и чудовище"), new Movie("Аватар"),
+                new Movie("Титаник")};
 
-        moviePosterManager.addMovie(movie);
-        moviePosterManager.addMovie(secondMovie);
-        moviePosterManager.addMovie(thirdMovie);
+        MoviePosterManager moviePosterManager = new MoviePosterManager();
+        moviePosterManager.addMovie(moviesToAdd[0]);
+        moviePosterManager.addMovie(moviesToAdd[1]);
+        moviePosterManager.addMovie(moviesToAdd[2]);
         Movie[] foundedMovies = moviePosterManager.findLast();
-        assertEquals(thirdMovie.getName(), foundedMovies[0].getName());
-        assertEquals(secondMovie.getName(), foundedMovies[1].getName());
-        assertEquals(movie.getName(), foundedMovies[2].getName());
+
+        for (int i = 0; i < foundedMovies.length; i++) {
+            assertEquals(moviesToAdd[foundedMovies.length - (i + 1)], foundedMovies[i]);
+        }
     }
 
     @Test
     public void shouldReturnOnlyTenLastMovies() {
-        Movie movie = new Movie("Красавица и чудовище");
-        Movie secondMovie = new Movie("Аватар");
-        Movie thirdMovie = new Movie("Титаник");
-        Movie fourthMovie = new Movie("Хатико");
-        Movie fifthMovie = new Movie("Зеленая миля");
-        Movie sixthMovie = new Movie("Портрет Дориана Грея");
-        Movie seventh = new Movie("Золушка");
-        Movie eighth = new Movie("Хроники Нарнии");
-        Movie ninth = new Movie("Терминатор");
-        Movie tenth = new Movie("Судья Дред");
-        Movie eleventh = new Movie("Паразиты");
+        Movie[] moviesToAdd = {new Movie("Красавица и чудовище"), new Movie("Аватар"),
+                new Movie("Титаник"), new Movie("Хатико"), new Movie("Зеленая миля"),
+                new Movie("Портрет Дориана Грея"), new Movie("Золушка"), new Movie("Хроники Нарнии"),
+                new Movie("Хроники Нарнии"), new Movie("Терминатор"), new Movie("Судья Дред"),
+                new Movie("Паразиты")
+        };
+        Movie[] expectedMoviesToReturn = Arrays.copyOfRange(moviesToAdd, 2, moviesToAdd.length);
 
-        MoviePosterManager moviePosterManager = new MoviePosterManager();
-
-        moviePosterManager.addMovie(movie);
-        moviePosterManager.addMovie(secondMovie);
-        moviePosterManager.addMovie(thirdMovie);
-        moviePosterManager.addMovie(fourthMovie);
-        moviePosterManager.addMovie(fifthMovie);
-        moviePosterManager.addMovie(sixthMovie);
-        moviePosterManager.addMovie(seventh);
-        moviePosterManager.addMovie(eighth);
-        moviePosterManager.addMovie(ninth);
-        moviePosterManager.addMovie(tenth);
-        moviePosterManager.addMovie(eleventh);
+        MoviePosterManager moviePosterManager = new MoviePosterManager(10);
+        for (Movie movie : moviesToAdd) {
+            moviePosterManager.addMovie(movie);
+        }
 
         Movie[] foundedMovies = moviePosterManager.findLast();
         assertEquals(10, foundedMovies.length);
+        for (int i = 0; i < foundedMovies.length; i++) {
+            assertEquals(expectedMoviesToReturn[foundedMovies.length - (i + 1)], foundedMovies[i]);
+        }
     }
-
 }
